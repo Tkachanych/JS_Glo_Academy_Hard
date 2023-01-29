@@ -8,7 +8,7 @@ let num = 266219;
 // Вывести в консоль произведение (умножение) цифр этого числа
 let result = num.toString()
                 .split('')
-                .reduce((sum, currentValue) => sum * +currentValue, 1);
+                .reduce((mult, currentValue) => mult * +currentValue, 1);
 
 console.log(result);
 
