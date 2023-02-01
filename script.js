@@ -1,17 +1,26 @@
 'use strict'
 
-let userString = '                     Lorem ipsum dolor sit amet. Est architecto soluta sit quasi dolor cum enim saepe et praesentium nesciunt qui magnam esse? Eos enim consequatur vel quis sint hic enim accusamus est dignissimos eveniet?';
-//let userString = '                     Lorem ipsum';
-//let userString = 5;
+let arr = [];
 
-// четвёртое задание.
-const trimString = (str) => {
-  if (typeof str === 'string') {
-    str = str.trim();
-    alert(str.slice(0, 30) + (str.length > 30 ? '...' : ''));
-  } else {
-    alert('Передана не строка!');
-  }
+for (let i = 0; i < 7; i++) {
+  arr.push((Math.random() * 100000).toFixed());
 }
 
-trimString(userString);
+//Вывести в консоль только те, что начинаются с цифры 2 или 4
+for (let i of arr) {
+  let twoOrFour = i.toString().charAt(0) === '2' || i.toString().charAt(0) === '4';
+  if (twoOrFour) {console.log(i);}
+}
+
+// Вывести в столбик все простые числа от 1 до 100
+for (let i = 2; i <= 100; i++) {
+  let dividerCount = 1;
+
+  for (let j = 1; j <= Math.floor(i / 2) || j === i; j++) {
+    dividerCount += i % j === 0 ? 1 : 0;
+  }
+
+  if (dividerCount === 2) {
+    console.log(`${i} Делители этого числа: 1 и ${i}`);
+  }
+}
