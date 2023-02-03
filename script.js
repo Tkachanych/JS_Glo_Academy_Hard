@@ -1,11 +1,8 @@
 'use strict';
 
-const game = function (tryCounts) {
+const tryToGues = function (numToGuess, tryCounts) {
 
   let userAnswer;
-
-  const numToGuess = Math.round(Math.random() * 100);
-  console.log(numToGuess);
 
   const isNumber = function (num) {
     return typeof num === 'number' && isFinite(num);
@@ -21,43 +18,46 @@ const game = function (tryCounts) {
     }
   }
 
-  const tryToGues = function (numToGuess) {
+  userAnswer = getAnswer(prompt('Угадай число от 1 до 100'));
 
-    userAnswer = getAnswer(prompt('Угадай число от 1 до 100'));
+  switch (true) {
 
-    switch (true) {
+    case userAnswer === null:
+      alert('Игра окончена!');
+      return;
 
-      case userAnswer === null:
+    case tryCounts < 1:
+      if (confirm('Попытки закончились, хотите сыграть еще?')) {
+        return game(9);
+      } else {
         alert('Игра окончена!');
         return;
+      }
 
-      case tryCounts < 1:
-        if (confirm('Попытки закончились, хотите сыграть еще?')) {
-          return game(10);
-        } else {
-          alert('Игра окончена!');
-          return;
-        }
+    case numToGuess < userAnswer:
+      alert(`Загаданное число меньше, осталось попыток ${tryCounts--}`);
+      return tryToGues(numToGuess, tryCounts);
 
-      case numToGuess < userAnswer:
-        alert(`Загаданное число меньше, осталось попыток ${tryCounts--}`);
-        return tryToGues(numToGuess);
+    case numToGuess > userAnswer:
+      alert(`Загаданное число больше, осталось попыток ${tryCounts--}`);
+      return tryToGues(numToGuess, tryCounts);
 
-      case numToGuess > userAnswer:
-        alert(`Загаданное число больше, осталось попыток ${tryCounts--}`);
-        return tryToGues(numToGuess);
-
-      case numToGuess === userAnswer:
-        if (confirm('Поздравляю, Вы угадали!!! Хотели бы сыграть еще?')) {
-          return game(9);
-        } else {
-          alert('Игра окончена!');
-          return;
-        }
-    }
+    case numToGuess === userAnswer:
+      if (confirm('Поздравляю, Вы угадали!!! Хотели бы сыграть еще?')) {
+        return game(9);
+      } else {
+        alert('Игра окончена!');
+        return;
+      }
   }
-
-  tryToGues(numToGuess);
 }
 
+const game = function (tryCounts) {
+
+  const numToGuess = Math.floor(Math.random() * 100) + 1;
+  console.log(numToGuess);
+
+  return tryToGues(numToGuess, tryCounts);
+}
+debugger;
 game(9);
