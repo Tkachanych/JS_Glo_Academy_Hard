@@ -28,7 +28,7 @@ const tryToGues = function (numToGuess, tryCounts) {
 
     case tryCounts < 1:
       if (confirm('Попытки закончились, хотите сыграть еще?')) {
-        return game(9);
+        return 1;
       } else {
         alert('Игра окончена!');
         return;
@@ -44,20 +44,25 @@ const tryToGues = function (numToGuess, tryCounts) {
 
     case numToGuess === userAnswer:
       if (confirm('Поздравляю, Вы угадали!!! Хотели бы сыграть еще?')) {
-        return game(9);
+        return 1;
       } else {
         alert('Игра окончена!');
-        return;
+        return 0;
       }
   }
 }
 
-const game = function (tryCounts) {
+const game = function (start) {
 
-  const numToGuess = Math.floor(Math.random() * 100) + 1;
-  console.log(numToGuess);
+  const num = Math.floor(Math.random() * 100) + 1
 
-  return tryToGues(numToGuess, tryCounts);
+  if (start === 0) { 
+    return;
+  } else {
+    console.log(num);
+    return game(tryToGues(num, 9));
+  }
 }
+
 debugger;
-game(9);
+game(1);
