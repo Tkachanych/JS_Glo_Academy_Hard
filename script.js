@@ -1,6 +1,6 @@
 'use strict';
 
-const game = function () {
+const game = function (tryCounts) {
 
   let userAnswer;
 
@@ -14,7 +14,7 @@ const game = function () {
   const getAnswer = function (str) {
     if (str === null) {
       return null;
-    } else if (isNumber(+str)) {
+    } else if (isNumber(+str) && str !== '') {
       return parseInt(str);
     } else {
       return getAnswer(prompt('Введи число!'));
@@ -31,21 +31,33 @@ const game = function () {
         alert('Игра окончена!');
         return;
 
+      case tryCounts < 1:
+        if (confirm('Попытки закончились, хотите сыграть еще?')) {
+          return game(10);
+        } else {
+          alert('Игра окончена!');
+          return;
+        }
+
       case numToGuess < userAnswer:
-        alert('Загаданное число меньше');
+        alert(`Загаданное число меньше, осталось попыток ${tryCounts--}`);
         return tryToGues(numToGuess);
 
       case numToGuess > userAnswer:
-        alert('Загаданное число больше');
+        alert(`Загаданное число больше, осталось попыток ${tryCounts--}`);
         return tryToGues(numToGuess);
 
       case numToGuess === userAnswer:
-        alert('Поздравляю, Вы угадали!!!');
-        return;
+        if (confirm('Поздравляю, Вы угадали!!! Хотели бы сыграть еще?')) {
+          return game(9);
+        } else {
+          alert('Игра окончена!');
+          return;
+        }
     }
   }
 
   tryToGues(numToGuess);
 }
 
-game();
+game(9);
