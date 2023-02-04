@@ -1,7 +1,7 @@
 'use strict';
 
 const date = new Date();
-const curDay = date.getDay() === 0 ? 6 : date.getDay() - 1;
+const curDay = (6 + date.getDay()) % 7;
 
 const week = [
   'понедельник',
