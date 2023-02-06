@@ -78,9 +78,7 @@ const appData = {
   },
 
   addPrices: function () {
-    for (let screen of this.screens) {
-      this.screenPrice += +screen.price;
-    }
+    this.screenPrice = this.screens.reduce((sum, screen) => sum + screen.price, 0);
   },
 
   getAllServicePrices: function () {
