@@ -1,118 +1,76 @@
 'use strict';
 
-const appData = {
-
-  title: '',
-  screens: [],
-  screenPrice: 0,
-  adaptive: true,
-  rollback: 15,
-  allServicePrices: 0,
-  fullPrice: 0,
-  rollbackMessage: '',
-  servicePercentPrice: 0,
-  services: {},
-
-  start: function () {
-    this.asking();
-    this.getTitle();
-    this.addPrices();
-    this.getAllServicePrices();
-    this.getFullPrice();
-    this.getRollbackMessage();
-    this.getServicePercentPrices();
-
-    this.logger();
-  },
-
-  isNumber: function (num) {
-    return !isNaN(parseFloat(num))
-      && (parseFloat(num).toString().length === num.length);
-  },
-
-  isString: function (str) {
-    return isNaN(str);
-  },
-
-  asking: function () {
-    let price = 0;
-    let nameScrType = '';
-    let nameSvcType = '';
-
-    do {
-      this.title = prompt('Как называется Ваш проект?', 'Калькулятор вёрстки');
-    } while (!this.isString(this.title));
-
-    for (let i = 0; i < 2; i++) {
-      do {
-        nameScrType = prompt('Какие типы экранов нужно разработать?');
-      } while (!this.isString(nameScrType));
-
-      do {
-        price = prompt('Сколько будет стоить данная работа?');
-      } while (!this.isNumber(price));
-
-      this.screens.push({ id: i, name: nameScrType, price: parseFloat(price) });
-    }
-
-    for (let i = 0; i < 2; i++) {
-      do {
-        nameSvcType = prompt('Какой дополнительный тип услуги нужен?');
-      } while (!this.isString(nameSvcType));
-      let price = 0;
-
-      do {
-        price = prompt('Сколько это будет стоить?');
-      } while (!this.isNumber(price));
-
-      this.services[`${i}_${nameSvcType}`] = parseFloat(price);
-    }
-
-    this.adaptive = confirm('Нужен ли адаптив на сайте?');
-  },
-
-  getTitle: function () {
-    let str = this.title.trim().toLowerCase();
-    this.title = str.charAt(0).toUpperCase() + str.slice(1);
-  },
-
-  addPrices: function () {
-    this.screenPrice = this.screens.reduce((sum, screen) => sum + screen.price, 0);
-  },
-
-  getAllServicePrices: function () {
-    for (let service in this.services) {
-      this.allServicePrices += +this.services[service];
-    }
-  },
-
-  getFullPrice: function () {
-    this.fullPrice = this.screenPrice + this.allServicePrices;
-  },
-
-  getRollbackMessage: function () {
-    if (this.fullPrice > 30000) this.rollbackMessage = 'Даём скидку в 10%';
-    else if (this.fullPrice > 15000) this.rollbackMessage = 'Даём скидку в 5%';
-    else if (this.fullPrice >= 0) this.rollbackMessage = 'Скидка не предусмотрена';
-    else this.rollbackMessage = 'Что-то пошло не так.';
-  },
-
-  getServicePercentPrices: function () {
-    this.servicePercentPrice = Math.ceil(this.fullPrice - (this.fullPrice * (this.rollback / 100)));
-  },
-
-  logger: function () {
-    console.log('title = ' + this.title);
-    console.dir(this.screens);
-    console.log('screenPrice = ' + this.screenPrice);
-    console.log('adaptive = ' + this.adaptive);
-    console.log('rollback = ' + this.rollback);
-    console.log('allServicePrices = ' + this.allServicePrices);
-    console.log('fullPrice = ' + this.fullPrice);
-    console.log('rollbackMessage = ' + this.rollbackMessage);
-    console.log('servicePercentPrice = ' + this.servicePercentPrice);
-    console.dir(this.services);
-  }
+const createString = function (id) {
+  const div = document.createElement('div');
+  div.id = id;
+  div.innerHTML = '';
+  document.body.append(div);
 }
 
-appData.start();
+const addDate = function () {
+
+  const date = new Date();
+  const curDay = (6 + date.getDay()) % 7;
+
+  const week = [
+    'Понедельник',
+    'Вторник',
+    'Среда',
+    'Четверг',
+    'Пятница',
+    'Суббота',
+    'Воскресенье'
+  ];
+
+  const months = [
+    'января',
+    'февраля',
+    'марта',
+    'апреля',
+    'мая',
+    'июня',
+    'июля',
+    'августа',
+    'сентября',
+    'октября',
+    'ноября',
+    'декабря'
+  ];
+
+  const dayOfWeek = week[curDay];
+  const day = date.getDate();
+  const curMonth = date.getMonth();
+  const curYear = date.getFullYear();
+  const curHour = date.getHours();
+  const curMinute = date.getMinutes();
+  const curSecond = date.getSeconds();
+
+  const getEnding = function (num) {
+    return num % 10 === 1 && num !== 11 ? 'а' //минутА, секундА
+      : [2, 3, 4].includes(num % 10) && ![12, 13, 14].includes(num) ? 'ы' //минутЫ, секундЫ
+        : '';
+  }
+
+  const addZero = function (str) {
+    return str.toString().length > 1 ? str : '0' + str;
+  }
+
+  const addDateToString = function (id, str) {
+    document.getElementById(id).innerHTML = str;
+  }
+
+  const strHour = [1, 21].includes(curHour) ? 'час' : [2, 3, 4, 22, 23].includes(curHour) ? 'часа' : 'часов';
+  const strMinute = 'минут' + getEnding(curMinute);
+  const strSecond = 'секунд' + getEnding(curSecond);
+
+  const stringDate = `Сегодня ${dayOfWeek}, ${day} ${months[curMonth]} ${curYear} года, ${curHour} ${strHour}, ${curMinute} ${strMinute}, ${curSecond} ${strSecond}`;
+  const numDate = `${addZero(day)}.${addZero(curMonth)}.${curYear} - ${addZero(curHour)}:${addZero(curMinute)}:${addZero(curSecond)}`
+
+  addDateToString('stringDate', stringDate);
+  addDateToString('numDate', numDate);
+}
+
+createString('stringDate');
+createString('numDate');
+
+setInterval(addDate, 1000);
