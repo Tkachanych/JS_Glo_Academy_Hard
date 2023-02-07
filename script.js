@@ -37,6 +37,22 @@ const addDate = function () {
     'декабря'
   ];
 
+  const arrHours = [
+    'часов',
+    'час',
+    'часа'
+  ];
+  const arrMinutes = [
+    'минут',
+    'минута',
+    'минуты'
+  ];
+  const arrSeconds = [
+    'секунд',
+    'секунда',
+    'секунды'
+  ];
+
   const dayOfWeek = week[curDay];
   const day = date.getDate();
   const curMonth = date.getMonth();
@@ -45,23 +61,25 @@ const addDate = function () {
   const curMinute = date.getMinutes();
   const curSecond = date.getSeconds();
 
-  const getEnding = function (num) {
-    return num % 10 === 1 && num !== 11 ? 'а' //минутА, секундА
-      : [2, 3, 4].includes(num % 10) && ![12, 13, 14].includes(num) ? 'ы' //минутЫ, секундЫ
-        : '';
+  const getEnding = function (num, array) {
+    let result;
+    if ([0,5,6,7,8,9].includes(num % 10) || [11,12,13,14].includes(num)) result = array[0];
+    else if (num % 10 === 1) result = array[1];
+    else result = array[2];
+    return result;
   }
 
   const addZero = function (str) {
-    return str.toString().length > 1 ? str : '0' + str;
+    return `0${str}`.slice(-2);
   }
 
   const addDateToString = function (id, str) {
     document.getElementById(id).innerHTML = str;
   }
 
-  const strHour = [1, 21].includes(curHour) ? 'час' : [2, 3, 4, 22, 23].includes(curHour) ? 'часа' : 'часов';
-  const strMinute = 'минут' + getEnding(curMinute);
-  const strSecond = 'секунд' + getEnding(curSecond);
+  const strHour = getEnding(curHour, arrHours);
+  const strMinute = getEnding(curMinute, arrMinutes);
+  const strSecond = getEnding(curSecond, arrSeconds);
 
   const stringDate = `Сегодня ${dayOfWeek}, ${day} ${months[curMonth]} ${curYear} года, ${curHour} ${strHour}, ${curMinute} ${strMinute}, ${curSecond} ${strSecond}`;
   const numDate = `${addZero(day)}.${addZero(curMonth)}.${curYear} - ${addZero(curHour)}:${addZero(curMinute)}:${addZero(curSecond)}`
