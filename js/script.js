@@ -80,6 +80,12 @@ const appData = {
   addRollback: function () {
     inputRangeValue.textContent = inputTypeRange.value + '%';
     appData.rollback = +inputTypeRange.value;
+    if (appData.screenPrice) {
+      appData.servicePercentPrice = Math.ceil(
+        appData.fullPrice - appData.fullPrice * (appData.rollback / 100)
+      );
+      totalCountRollback.value = appData.servicePercentPrice;
+    }
   },
 
   cleanData: function () {
